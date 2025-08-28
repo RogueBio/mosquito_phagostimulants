@@ -13,7 +13,7 @@ Mosquito feeding is a combination of processes that are precisely regulated, gui
 - Determine transcriptional changes in the heads associated with mosquito feeding on MFS and (E)-4-Hydroxy-3-methyl-but-2-enyl pyrophosphate (HMBPP) mix
 - Determine transcriptional changes in the heads associated with mosquito feeding on MFS and ATP mix
 
-Fed at 37°C at the start of the scotophase on a XX light phase, mosquitoes were mated and fed on day 5 after emerging
+Fed at 37°C at the start of the scotophase on a 12:12 light phase, mosquitoes were mated and fed on day 5 after emerging
 
 ## Project Pipeline Overview
 
