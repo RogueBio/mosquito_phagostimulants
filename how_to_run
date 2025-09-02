@@ -21,40 +21,44 @@ num_files=${#fastq_files[@]}
 echo "Submitting job array for $num_files files..."
 sbatch --array=0-$(($num_files - 1)) /home/ar9416e/git_repos/mosquito_phagostimulants/fastqc.sh
 
-## Step 2: Trimming with Trimmomatic
-
-# Set raw data directory
-export raw_data_dir="/home/ar9416e/mosquito_phagostimulants/raw_data/raw_files"
-ls "$raw_data_dir"
-
-# Use newline separator
-IFS=$'\n'
-
-# Find all .fastq files in the raw_data directory and its subdirectories
-fastq_files=($(find "$raw_data_dir" -type f \( -iname "*.fastq" -o -iname "*.fastq.gz" -o -iname "*.fq" -o -iname "*.fq.gz" \)))
-
-# Output the number of files found
-echo "Found ${#fastq_files[@]} FASTQ files."
-
-# Find all paired .fastq files in the raw_data directory and its subdirectories
-
-# Check for both R1 and R2 FASTQ files with updated pattern
-R1_files=($(find "$raw_data_dir" -type f -name '*R1_*.fastq.gz' ! -name '._*' | sort))
-R2_files=($(find "$raw_data_dir" -type f -name '*R2_*.fastq.gz' ! -name '._*' | sort))
-num_files=${#R1_files[@]}
-
-# Debugging: print R1 and R2 filenames found
-echo "Number of R1 files: ${#R1_files[@]}"
-echo "Number of R2 files: ${#R2_files[@]}"
-
-# Submit the SLURM job array for paired files
-num_files=${#R1_files[@]}
-echo "Submitting job array for $num_files paired files..."
-sbatch --array=0-$(($num_files - 1)) git_repos/mosquito_sex/trimmomatic_array.sh
+## Step 2: Trimming poly-tails with cutadapt
 
 ##Submitting a job for cutadapt (DO NOT USE UNLESS SURE OF WHAT REMOVING)
 
-sbatch --array=0-47 git_repos/mosquito_sex/cutadapt_polya.sh
+sbatch --array=0-46 git_repos/mosquito_sex/cutadapt_polya.sh
+
+## Step 2: Trimming with Trimmomatic
+raw_data_dir="/home/ar9416e/mosquito_phagostimulants/trimmed_reads/trimmed_cutadapt"
+export raw_data_dir
+
+# Check directory contents
+ls "$raw_data_dir"
+
+# Use newline separator for safety
+IFS=$'\n'
+
+# Count all FASTQs
+fastq_files=($(find "$raw_data_dir" -type f \( -iname "*.fastq" -o -iname "*.fastq.gz" -o -iname "*.fq" -o -iname "*.fq.gz" \)))
+echo "Found ${#fastq_files[@]} FASTQ files in total."
+
+# Find paired FASTQs (_1 / _2 naming)
+R1_files=($(find "$raw_data_dir" -type f -name '*_1.fq.gz' ! -name '._*' | sort))
+R2_files=($(find "$raw_data_dir" -type f -name '*_2.fq.gz' ! -name '._*' | sort))
+
+echo "Number of R1 files: ${#R1_files[@]}"
+echo "Number of R2 files: ${#R2_files[@]}"
+
+# Guard: make sure counts match
+if [[ ${#R1_files[@]} -ne ${#R2_files[@]} ]]; then
+  echo "Error: mismatch in R1 and R2 file counts!"
+  exit 1
+fi
+
+# Submit SLURM job array
+num_files=${#R1_files[@]}
+echo "Submitting job array for $num_files paired files..."
+sbatch --array=0-$(($num_files - 1)) git_repos/mosquito_phagostimulants/trimmomatic_array.sh
+
 
 ## Step 3: QC with FastQC (Post-trimming)
 
