@@ -12,11 +12,14 @@
 module load cutadapt/4.2-GCCcore-11.3.0
 
 # Directories
-input_dir="
-/home/ar9416e/mosquito_phagostimulants/raw_data/raw_files"
+input_dir="/home/ar9416e/mosquito_phagostimulants/raw_data/raw_files"
 output_dir="/home/ar9416e/mosquito_phagostimulants/trimmed_reads/trimmed_cutadapt"
 mkdir -p "$output_dir"
-mkdir -p logs
+mkdir -p /home/ar9416e/mosquito_phagostimulants/logs/cutadapt_logs
+
+# Collect input files (recursively)
+R1_files=($(find "$input_dir" -type f -name '*_1.fq.gz' | sort))
+R2_files=($(find "$input_dir" -type f -name '*_2.fq.gz' | sort))
 
 # Collect input files
 R1_files=($(find "$input_dir" -type f -name '*_1.fq.gz' | sort))
@@ -32,10 +35,6 @@ sample_name=$(basename "$R1" _1.fq.gz)
 # Construct output filenames
 R1_out="${output_dir}/${sample_name}_cut_1.fq.gz"
 R2_out="${output_dir}/${sample_name}_cut_2.fq.gz"
-
-# Output paths
-R1_out="${output_dir}/${cut_base_R1}.fastq.gz"
-R2_out="${output_dir}/${cut_base_R2}.fastq.gz"
 
 # Run Cutadapt to remove polyA/T/C/G tails
 echo "Processing ${sample_name}"
