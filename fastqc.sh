@@ -3,9 +3,9 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=8G
 #SBATCH --time=01:00:00
-#SBATCH --array=0-192
+#SBATCH --array=0-93
 #SBATCH --job-name=fastqc_array
-#SBATCH --output=logs/fastqc_%A_%a.log
+#SBATCH --output=/home/ar9416e/mosquito_phagostimulants/logs/fastqc_%A_%a.log
 
 module load FastQC/0.12.1-Java-17
 
