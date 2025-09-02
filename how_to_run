@@ -19,8 +19,7 @@ echo "Found ${#fastq_files[@]} FASTQ files."
 # Submit the SLURM job array
 num_files=${#fastq_files[@]}
 echo "Submitting job array for $num_files files..."
-sbatch --array=0-$(($num_files - 1)) git_repos/mosquito_phagostimulants/fastqc_array.sh
-
+sbatch --array=0-$(($num_files - 1)) /home/ar9416e/git_repos/mosquito_phagostimulants/fastqc.sh
 
 ## Step 2: Trimming with Trimmomatic
 
