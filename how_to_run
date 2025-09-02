@@ -23,7 +23,7 @@ sbatch --array=0-$(($num_files - 1)) /home/ar9416e/git_repos/mosquito_phagostimu
 
 
 ## Step 2: Trimming with Trimmomatic
-raw_data_dir="/home/ar9416e/mosquito_phagostimulants/trimmed_reads/trimmed_cutadapt"
+raw_data_dir="/home/ar9416e/mosquito_phagostimulants/raw_data/raw_files"
 export raw_data_dir
 
 # Check directory contents
@@ -64,7 +64,10 @@ sbatch --array=0-46 git_repos/mosquito_sex/cutadapt_polya.sh
 ## Step 3: QC with FastQC (Post-trimming)
 
 # Directory containing the raw data
-export raw_data_dir="/home/ar9416e/mosquito_sex/trimmed_reads_polyA"
+
+raw_data_dir="/home/ar9416e/mosquito_phagostimulants/trimmed_reads/trimmomatic_reads"
+
+export raw_data_dir="/home/ar9416e/mosquito_phagostimulants/trimmed_reads/trimmomatic_reads"
 ls "$raw_data_dir"
 
 # Set Internal Field Separator (IFS) to newline to handle filenames with spaces
@@ -82,7 +85,7 @@ echo "Found ${#fastq_files[@]} FASTQ files."
 # Submit the SLURM job array
 num_files=${#fastq_files[@]}
 echo "Submitting job array for $num_files files..."
-sbatch --array=0-$(($num_files - 1)) git_repos/mosquito_sex/fastqc_array_2.sh
+sbatch --array=0-$(($num_files - 1)) git_repos/mosquito_phagostimulants/fastqc_trim.sh
 
 ## Step 4: Salmon Alignment
 
