@@ -22,7 +22,7 @@ fi
 
 # Setup directories
 raw_data_dir="/home/ar9416e/mosquito_phagostimulants/trimmed_reads/trimmed_poly_tails"
-output_dir="/home/ar9416e/mosquito_sex/trimmed_reads/trimmomatic_reads"
+output_dir="/home/ar9416e/mosquito_phagostimulants/trimmed_reads/trimmomatic_reads"
 mkdir -p "$output_dir"
 
 # Find all R1 and R2 fastq.gz files
