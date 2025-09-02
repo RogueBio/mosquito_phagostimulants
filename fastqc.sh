@@ -10,7 +10,7 @@
 module load FastQC/0.12.1-Java-17
 
 # Setup
-raw_data_dir="/home/ar9416e/mosquito_phagostimulants/raw_data"
+raw_data_dir="/home/ar9416e/mosquito_phagostimulants/raw_data/raw_files"
 output_dir="/home/ar9416e/mosquito_phagostimulants/qc_reports/initial"
 mkdir -p "$output_dir"
 mkdir -p logs  # Ensure logs directory exists
