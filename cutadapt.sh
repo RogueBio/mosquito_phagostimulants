@@ -4,32 +4,34 @@
 #SBATCH --mem=8G
 #SBATCH --time=01:00:00
 #SBATCH --job-name=trim_polyA
-#SBATCH --output=logs/polyA_trim_%A_%a.log
-#SBATCH --array=0-47
+#SBATCH --output=/home/ar9416e/mosquito_phagostimulants/logs/cutadapt_logs/cutadapt_%A_%a.log
+
+#SBATCH --array=0-46
 
 # Load Cutadapt
 module load cutadapt/4.2-GCCcore-11.3.0
 
 # Directories
-input_dir="/home/ar9416e/mosquito_phagostimulants/raw_data"
-output_dir="/home/ar9416e/mosquito_phagostimulants/trimmed_reads/trimmed_poly_tails"
+input_dir="
+/home/ar9416e/mosquito_phagostimulants/raw_data/raw_files"
+output_dir="/home/ar9416e/mosquito_phagostimulants/trimmed_reads/trimmed_cutadapt"
 mkdir -p "$output_dir"
 mkdir -p logs
 
 # Collect input files
-R1_files=($(find "$input_dir" -type f -name '*_R1_paired.fastq.gz' | sort))
-R2_files=($(find "$input_dir" -type f -name '*_R2_paired.fastq.gz' | sort))
+R1_files=($(find "$input_dir" -type f -name '*_1.fq.gz' | sort))
+R2_files=($(find "$input_dir" -type f -name '*_2.fq.gz' | sort))
 
 # Select file based on SLURM_ARRAY_TASK_ID
 R1=${R1_files[$SLURM_ARRAY_TASK_ID]}
 R2=${R2_files[$SLURM_ARRAY_TASK_ID]}
 
 # Extract base sample name (e.g., UJ-3092-25-1B)
-sample_name=$(basename "$R1" _R1_paired.fastq.gz)
+sample_name=$(basename "$R1" _1.fq.gz)
 
 # Construct output filenames
-cut_base_R1="${sample_name}_cut_R1_paired"
-cut_base_R2="${sample_name}_cut_R2_paired"
+R1_out="${output_dir}/${sample_name}_cut_1.fq.gz"
+R2_out="${output_dir}/${sample_name}_cut_2.fq.gz"
 
 # Output paths
 R1_out="${output_dir}/${cut_base_R1}.fastq.gz"
