@@ -3,9 +3,9 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=8G
 #SBATCH --time=02:00:00
-#SBATCH --array=0-191
+#SBATCH --array=0-93
 #SBATCH --job-name=trimmomatic_array
-#SBATCH --output=/home/ar9416e/mosquito_sex/trimmed_reads/trim_%A_%a.log
+#SBATCH --output=/home/ar9416e/mosquito_phagostimulants/logs/trimmomatic/fastqc_%A_%a.log
 
 # Load required modules
 module load Java/17.0.6
@@ -21,14 +21,13 @@ if [[ ! -f "$adapter_file" ]]; then
 fi
 
 # Setup directories
-raw_data_dir="/home/ar9416e/mosquito_phagostimulants/trimmed_reads/trimmed_poly_tails"
+raw_data_dir="/home/ar9416e/mosquito_phagostimulants/raw_data/raw_files"
 output_dir="/home/ar9416e/mosquito_phagostimulants/trimmed_reads/trimmomatic_reads"
 mkdir -p "$output_dir"
 
 # Find all R1 and R2 fastq.gz files
-R1_files=($(find "$raw_data_dir" -type f -name '*R1_*.fastq.gz' ! -name '._*' | sort))
-R2_files=($(find "$raw_data_dir" -type f -name '*R2_*.fastq.gz' ! -name '._*' | sort))
-
+R1_files=($(find "$raw_data_dir" -type f -name '*_1.fq.gz' ! -name '._*' | sort))
+R2_files=($(find "$raw_data_dir" -type f -name '*_2.fq.gz' ! -name '._*' | sort))
 
 # Debug info
 echo "Number of R1 files: ${#R1_files[@]}"
