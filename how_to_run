@@ -21,11 +21,6 @@ num_files=${#fastq_files[@]}
 echo "Submitting job array for $num_files files..."
 sbatch --array=0-$(($num_files - 1)) /home/ar9416e/git_repos/mosquito_phagostimulants/fastqc.sh
 
-## Step 2: Trimming poly-tails with cutadapt
-
-##Submitting a job for cutadapt (DO NOT USE UNLESS SURE OF WHAT REMOVING)
-
-sbatch --array=0-46 git_repos/mosquito_sex/cutadapt_polya.sh
 
 ## Step 2: Trimming with Trimmomatic
 raw_data_dir="/home/ar9416e/mosquito_phagostimulants/trimmed_reads/trimmed_cutadapt"
@@ -58,6 +53,12 @@ fi
 num_files=${#R1_files[@]}
 echo "Submitting job array for $num_files paired files..."
 sbatch --array=0-$(($num_files - 1)) git_repos/mosquito_phagostimulants/trimmomatic_array.sh
+
+## Step 2: Trimming poly-tails with cutadapt
+
+##Submitting a job for cutadapt (DO NOT USE UNLESS SURE OF WHAT REMOVING)
+
+sbatch --array=0-46 git_repos/mosquito_sex/cutadapt_polya.sh
 
 
 ## Step 3: QC with FastQC (Post-trimming)
