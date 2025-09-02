@@ -1,30 +1,31 @@
 ## Step 1: QC with FastQC
 
 # Directory containing the raw data
+raw_data_dir="/home/ar9416e/mosquito_phagostimulants/raw_data/raw_files"
 ls "$raw_data_dir"
 
 # Set Internal Field Separator (IFS) to newline to handle filenames with spaces
 IFS=$'\n'
 
-# Find all .fastq files in the raw_data directory and its subdirectories
+# Find all FASTQ files recursively in subdirectories
 fastq_files=($(find "$raw_data_dir" -type f \( -iname "*.fastq" -o -iname "*.fastq.gz" -o -iname "*.fq" -o -iname "*.fq.gz" \)))
 
-# Write them to a file
+# Save the list to a file
 printf "%s\n" "${fastq_files[@]}" > fastq_files
 
-# Output the number of files found
+# Count files
 echo "Found ${#fastq_files[@]} FASTQ files."
 
 # Submit the SLURM job array
 num_files=${#fastq_files[@]}
 echo "Submitting job array for $num_files files..."
-sbatch --array=0-$(($num_files - 1)) git_repos/mosquito_sex/fastqc_array.sh
+sbatch --array=0-$(($num_files - 1)) git_repos/mosquito_phagostimulants/fastqc_array.sh
 
 
 ## Step 2: Trimming with Trimmomatic
 
 # Set raw data directory
-export raw_data_dir="/home/ar9416e/mosquito_phagostimulants/raw_data/extraacted_data"
+export raw_data_dir="/home/ar9416e/mosquito_phagostimulants/raw_data/raw_files"
 ls "$raw_data_dir"
 
 # Use newline separator
