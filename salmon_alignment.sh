@@ -6,9 +6,9 @@
 #SBATCH --cpus-per-task=10
 #SBATCH --mem=40G
 #SBATCH --time=04:00:00
-#SBATCH --array=0-47
-#SBATCH --output=logs/salmon_%x_%j.out
-#SBATCH --error=logs/salmon_%x_%j.err
+#SBATCH --array=0-93
+#SBATCH --output=/home/ar9416e/mosquito_phagostimulants/logs/salmon_%A_%a.log
+#SBATCH --error=/home/ar9416e/mosquito_phagostimulants/logs/salmonerror_%x_%j.err
 
 # Load Salmon module if needed
 # module load salmon
@@ -21,8 +21,8 @@ salmon_index="/home/ar9416e/mosquito_phagostimulants/alignments/salmon_index"
 output_dir="/home/ar9416e/mosquito_phagostimulants/alignments"
 
 # Define read file arrays
-R1_files=(/home/ar9416e/mosquito_sex/trimmed_reads_polyA/*_R1_paired.fastq.gz)
-R2_files=(/home/ar9416e/mosquito_sex/trimmed_reads_polyA/*_R2_paired.fastq.gz)
+R1_files=(/home/ar9416e/mosquito_phagostimulants/trimmed_reads/trimmed_cutadapt/*_R1_paired.fastq.gz)
+R2_files=(/home/ar9416e/mosquito_phagostimulants/trimmed_reads/trimmed_cutadapt/*_R2_paired.fastq.gz)
 
 # Get the correct input files based on the array task ID
 R1="${R1_files[$SLURM_ARRAY_TASK_ID]}"
