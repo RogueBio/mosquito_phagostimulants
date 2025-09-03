@@ -21,8 +21,8 @@ salmon_index="/home/ar9416e/mosquito_phagostimulants/alignments/salmon_index"
 output_dir="/home/ar9416e/mosquito_phagostimulants/alignments"
 
 # Define read file arrays
-R1_files=(/home/ar9416e/mosquito_phagostimulants/trimmed_reads/trimmed_cutadapt/*_R1_paired.fastq.gz)
-R2_files=(/home/ar9416e/mosquito_phagostimulants/trimmed_reads/trimmed_cutadapt/*_R2_paired.fastq.gz)
+R1_files=(/home/ar9416e/mosquito_phagostimulants/trimmed_reads/trimmed_cutadapt/*_cut_R1.fastq.gz)
+R2_files=(/home/ar9416e/mosquito_phagostimulants/trimmed_reads/trimmed_cutadapt/*_cut_R2.fastq.gz)
 
 # Get the correct input files based on the array task ID
 R1="${R1_files[$SLURM_ARRAY_TASK_ID]}"
