@@ -1,4 +1,3 @@
-
 #!/bin/bash
 #SBATCH --partition=cpu-standard
 #SBATCH --cpus-per-task=4
