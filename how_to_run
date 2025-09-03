@@ -58,7 +58,7 @@ sbatch --array=0-$(($num_files - 1)) git_repos/mosquito_phagostimulants/trimmoma
 
 ##Submitting a job for cutadapt (DO NOT USE UNLESS SURE OF WHAT REMOVING)
 
-sbatch --array=0-46 git_repos/mosquito_sex/cutadapt_polya.sh
+sbatch --array=0-93 git_repos/mosquito_phagostimulants/cutadapt.sh
 
 
 ## Step 3: QC with FastQC (Post-trimming)
@@ -86,6 +86,32 @@ echo "Found ${#fastq_files[@]} FASTQ files."
 num_files=${#fastq_files[@]}
 echo "Submitting job array for $num_files files..."
 sbatch --array=0-$(($num_files - 1)) git_repos/mosquito_phagostimulants/fastqc_trim.sh
+
+## Step 3: QC with FastQC (Post-trimming cut)
+
+# Directory containing the raw data
+
+raw_data_dir="/home/ar9416e/mosquito_phagostimulants/trimmed_reads/trimmed_cutadapt"
+
+export raw_data_dir="/home/ar9416e/mosquito_phagostimulants/trimmed_reads/trimmed_cutadapt"
+ls "$raw_data_dir"
+
+# Set Internal Field Separator (IFS) to newline to handle filenames with spaces
+IFS=$'\n'
+
+# Find all .fastq files in the raw_data directory and its subdirectories
+fastq_files=($(find "$raw_data_dir" -type f \( -iname "*.fastq" -o -iname "*.fastq.gz" -o -iname "*.fq" -o -iname "*.fq.gz" \)))
+
+# Write them to a file
+printf "%s\n" "${fastq_files[@]}" > fastq_files
+
+# Output the number of files found
+echo "Found ${#fastq_files[@]} FASTQ files."
+
+# Submit the SLURM job array
+num_files=${#fastq_files[@]}
+echo "Submitting job array for $num_files files..."
+sbatch --array=0-$(($num_files - 1)) git_repos/mosquito_phagostimulants/fastqc_array_cutadapt.sh
 
 ## Step 4: Salmon Alignment
 
