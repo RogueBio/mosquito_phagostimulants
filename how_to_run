@@ -143,7 +143,7 @@ module load Salmon/1.10.1-GCC-12.3.0
 module load gzip
 
 # Set desired output directory
-index_dir="/home/ar9416e/mosquito_sex/alignments/salmon_index"
+index_dir="/home/ar9416e/mosquito_phagostimulants/alignments/salmon_index"
 
 # Create it if it doesn't exist
 mkdir -p "$index_dir"
@@ -154,14 +154,14 @@ salmon index -t trans_and_gen.fa.gz -d decoys.txt -p 30 -i "$index_dir"
 #Step 5: Run alignment with Salmon
 
 # Set path to salmon index (make sure the index directory is used)
-salmon_index="/home/ar9416e/mosquito_sex/alignments/salmon_index"
+salmon_index="/home/ar9416e/mosquito_phagostimulants/alignments/salmon_index"
 
 # Trimmed fastq file folder
-TRIM_DATA_DIR="/home/ar9416e/mosquito_sex/trimmed_reads_polyA"
+TRIM_DATA_DIR="/home/ar9416e/mosquito_phagostimulants/trimmed_reads/trimmed_cutadapt"
 
 # Check for both R1 and R2 FASTQ files with updated pattern
-R1_files=($(find "$TRIM_DATA_DIR" -type f -name '*R1*_paired.fastq.gz'))
-R2_files=($(find "$TRIM_DATA_DIR" -type f -name '*R2*_paired.fastq.gz'))
+R1_files=($(find "$TRIM_DATA_DIR" -type f -name '*_cut_R1.fastq.gz' | sort))
+R2_files=($(find "$TRIM_DATA_DIR" -type f -name '*_cut_R2.fastq.gz' | sort))
 num_files=${#R1_files[@]}
 
 # Debug: Print the numbers of files found
@@ -174,11 +174,11 @@ export R2_files
 export salmon_index
 
 # You can also export any other variables needed in salmon_alignment.sh, e.g.:
-export output_dir="/home/ar9416e/mosquito_sex/alignments"
+export output_dir="/home/ar9416e/mosquito_phagostimulants/alignments"
 
 # Submit the SLURM job array for paired files
 echo "Submitting job array for $num_files paired files..."
-sbatch --array=0-$(($num_files - 1)) /home/ar9416e/git_repos/mosquito_sex/salmon_alignment.sh
+sbatch --array=0-$(($num_files - 1)) /home/ar9416e/git_repos/mosquito_phagostimulants/salmon_alignment.sh
 
 # Get % mapped reads
 for d in *_quant; do
@@ -190,4 +190,4 @@ for d in *_quant; do
     echo "$d: log file not found"
   fi
 done > percentage_mapped
-# filepath: /home/ar9416e/mosquito_sex/alignments/extract_mapping_rates.sh
+# filepath: /home/ar9416e/mosquito_phagostimulants/alignments/extract_mapping_rates.sh
